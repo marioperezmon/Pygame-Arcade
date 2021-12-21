@@ -40,18 +40,40 @@ if __name__ == "__main__":
     pruebaBoton.test()
     '''
 
-    import pygame
+    #import pygame
+
+    cont = 1
+    juegos_str = ""
+    num_juegos = len(lista)
+
+    for juego in lista:
+        #print(str(cont) + " .- " + juego["nombre"] + " - " + juego["lanzador"])
+        juegos_str += "\t" + str(cont) + " .- " + juego["nombre"] + " - " + juego["lanzador"] +"\n"
+        cont += 1
 
     # Bucle principal (muestra el menu y permite acceder a los juegos)
 
-    num_juegos = len(lista)
-    print(num_juegos)
+    menu = "\n [!] Bienvenido al menu principal! Juegos disponibles:\n" + juegos_str + "\n" + \
+        " [!] Opciones:\n" + \
+        "\t[1 - " + str(num_juegos) + "] Iniciar juego\n" + \
+        "\t[0] Salir\n"
 
-    for juego in lista:
-        print(".- Juego " + juego["nombre"] + " - " + juego["lanzador"])
+    while True:
 
+        print(menu)
 
-    sys.exit(0)
+        op = int(input("Opcion elegida? "))
+
+        if op == 0:
+            print("\nOK, saliendo...\n")
+            sys.exit(0)
+        else:
+            # la opcion 1 es la posicion 0 de la lista de juegos y sucesivamente...
+            op -= 1
+            nombre_juego = lista[op]["nombre"]
+            print("\nLanzando el juego " + nombre_juego)
+            time.sleep(3)
+            print("Fin del " + nombre_juego + "...")
 
 
 
