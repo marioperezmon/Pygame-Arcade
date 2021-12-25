@@ -6,6 +6,125 @@
     Lanza el menu principal del arcade, desde el que se accede a los juegos
 '''
 
+# Muestra el menu principal y devuelve la posicion del juego seleccionado
+def mainMenu():
+
+    pygame.init()
+
+    font = pygame.font.Font('freesansbold.ttf', 25)
+
+    # Titulo
+    txtTitulo = "Pygame Arcade - Menu"
+    pygame.display.set_caption(txtTitulo)
+
+    # Dimensiones
+    size = width, height
+    screen = pygame.display.set_mode(size)
+
+    screen.fill(col.blanco)
+
+    # Hay tantos botones como juegos + 1 (SALIR)
+    num_bt = num_juegos + 1
+
+    # el ancho de los botones depende del juego con nombre mas largo
+    width_bt = nombre_mas_largo * 8 + 40
+    # ancho donde empiezan los botones
+    pos_width_bt = (width / 2) - width_bt/2
+
+    height_bt = separacion_height_bt = 35
+    espacio_total_height_bt = num_bt * (height_bt + separacion_height_bt) - separacion_height_bt # el ultimo boton no tiene separacion por debajo
+    # alto donde empiezan los botones
+    pos_height_bt = (height / 2) - espacio_total_height_bt/2
+
+    # TODO -> adaptar la creacion de botones para que se ajuste "dinamicamente" al añadir juegos a la lista
+    
+    bt_0 = boton(col.rojo     , pos_width_bt, pos_height_bt                     , width_bt, height_bt, lista[0]["nombre"])
+    bt_1 = boton(col.rojo     , pos_width_bt, pos_height_bt+separacion_height_bt*2, width_bt, height_bt, lista[1]["nombre"])
+    
+    btSalir = boton(col.dorado, pos_width_bt, pos_height_bt+separacion_height_bt*4, width_bt, height_bt, 'SALIR')
+
+    while True:
+
+        screen.fill(col.blanco)
+
+        # Muestra el titulo y los botones
+        '''
+        text = font.render(txtTitulo, True, col.rojo, col.blanco)
+        textRect = text.get_rect()
+        textRect.center = (width // 2, (height // 2) - 120)
+        screen.blit(text, textRect)
+        '''
+
+        bt_0.draw(screen)
+        bt_1.draw(screen)
+        btSalir.draw(screen)
+
+        # sin un for de control de eventos, falla al abrir pygame window
+        for event in pygame.event.get():
+
+            mousePos = pygame.mouse.get_pos()
+
+            if event.type == pygame.QUIT:
+                quit()
+
+            # cuando haya un clic
+            if event.type == pygame.MOUSEBUTTONDOWN:
+
+                # Click en "SALIR"
+                if btSalir.mouseIsOver(mousePos):
+                    quit()
+
+                # Click en "Tres En Raya"
+                if bt_0.mouseIsOver(mousePos):
+                    print("Juego Tres en raya seleccionado")
+                    return 0
+
+                # Click en "Snake"
+                elif bt_1.mouseIsOver(mousePos):
+                    print("Juego Snake seleccionado")
+                    return 1
+
+            if bt_0.mouseIsOver(mousePos):
+                bt_0.color = col.rojoClaro
+            else:
+                bt_0.color = col.rojo
+
+            if bt_1.mouseIsOver(mousePos):
+                bt_1.color = col.rojoClaro
+            else:
+                bt_1.color = col.rojo
+
+            if btSalir.mouseIsOver(mousePos):
+                btSalir.color = col.doradoClaro
+            else:
+                btSalir.color = col.dorado
+
+        pygame.display.update()
+
+    '''
+    menu = "\n [!] Bienvenido al menu principal! Juegos disponibles:\n" + juegos_str + "\n" + \
+        " [!] Opciones:\n" + \
+        "\t[1 - " + str(num_juegos) + "] Iniciar juego\n" + \
+        "\t[0] Salir\n"
+
+    while True:
+
+        print(menu)
+
+        op = int(input("Opcion elegida? "))
+
+        if op == 0:
+            print("\nOK, saliendo...\n")
+            sys.exit(0)
+        else:
+            # la opcion 1 es la posicion 0 de la lista de juegos y sucesivamente...
+            op -= 1
+            nombre_juego = lista[op]["nombre"]
+            print("\nLanzando el juego " + nombre_juego)
+            time.sleep(3)
+            print("Fin del " + nombre_juego + "...")
+    '''
+
 if __name__ == "__main__":
 
     # importa una serie de librerias basicas
@@ -30,7 +149,7 @@ if __name__ == "__main__":
     Se puede acceder con:
 
     print(lista[1])
-    print(lista["nombre"])
+    print(lista[0]["nombre"])
     '''
     
     # para importar una clase (c_boton)
@@ -40,159 +159,30 @@ if __name__ == "__main__":
     pruebaBoton.test()
     '''
 
-    #import pygame
+    import pygame
 
     cont = 1
     juegos_str = ""
     num_juegos = len(lista)
+    nombre_mas_largo = 0
 
     for juego in lista:
         #print(str(cont) + " .- " + juego["nombre"] + " - " + juego["lanzador"])
         juegos_str += "\t" + str(cont) + " .- " + juego["nombre"] + " - " + juego["lanzador"] +"\n"
         cont += 1
 
-    # Bucle principal (muestra el menu y permite acceder a los juegos)
+        #print(juego["nombre"], len(juego["nombre"]))
 
-    menu = "\n [!] Bienvenido al menu principal! Juegos disponibles:\n" + juegos_str + "\n" + \
-        " [!] Opciones:\n" + \
-        "\t[1 - " + str(num_juegos) + "] Iniciar juego\n" + \
-        "\t[0] Salir\n"
+        # Busca el nombre del juego mas largo
+        if len(juego["nombre"]) > nombre_mas_largo:
+            nombre_mas_largo = len(juego["nombre"])
 
-    while True:
+    # Funcion principal (muestra el menu y permite acceder a los juegos)
+    pos_juego = mainMenu()
 
-        print(menu)
+    print("Hay que lanzar el juego " + str(lista[pos_juego]["nombre"]))
+    print("exec(" + lista[pos_juego]["lanzador"] + ")")
+    exec(lista[pos_juego]["lanzador"])
 
-        op = int(input("Opcion elegida? "))
+    # "Tres en Raya": "from TresEnRaya import tresEnRaya",
 
-        if op == 0:
-            print("\nOK, saliendo...\n")
-            sys.exit(0)
-        else:
-            # la opcion 1 es la posicion 0 de la lista de juegos y sucesivamente...
-            op -= 1
-            nombre_juego = lista[op]["nombre"]
-            print("\nLanzando el juego " + nombre_juego)
-            time.sleep(3)
-            print("Fin del " + nombre_juego + "...")
-
-
-
-from Boton import boton
-from colores import rojo, rojoClaro, azul, negro, blanco, dorado, doradoClaro
-import pygame
-
-# Funcion que muestra un menu para elegir el modo de juego
-def menuInicial():
-
-    # Inicio configuracion pantalla + juego
-    pygame.init()
-
-    # Textos a mostrar en la pantalla inicial
-    txtTitulo = "Arcade - Inicio"
-    juegos = {}
-    juegos[0] = "Tres en Raya"
-    juegos[1] = "Snake"
-
-    # Titulo de la ventana
-    pygame.display.set_caption(txtTitulo)
-
-    # Tamanho de la pantalla de juego
-    size = width, height = 500, 400
-
-    # Configuracion de la pantalla
-    screen = pygame.display.set_mode(size)
-
-    # Rellenar la pantalla
-    screen.fill(blanco)
-
-    # Botones
-    height_bt = (height // 2) - 50 # Separacion de 50 entre botones
-    btTresEnRaya = boton(rojo  , 195, height_bt     , 105, 35, juegos[0])
-    btSnake = boton(rojo       , 195, height_bt + 50, 105, 35, juegos[1])
-    btSalir = boton(dorado     , 215, height_bt + 110, 70, 40, 'SALIR')
-
-    juegoSeleccionado = False
-
-    # Mientras no se haya elegido un juego
-    while not juegoSeleccionado:
-
-        # Rellenar la pantalla
-        screen.fill(blanco)
-
-        font = pygame.font.Font('freesansbold.ttf', 25)
-
-        # Mostrar TITULO
-        text = font.render(txtTitulo, True, rojo, blanco)
-        textRect = text.get_rect()
-        textRect.center = (width // 2, (height // 2) - 120)
-        screen.blit(text, textRect)
-
-        # Muestra los botones
-        btTresEnRaya.draw(screen)
-        btSnake.draw(screen)
-        btSalir.draw(screen)
-
-        # sin un for de control de eventos, falla al abrir pygame window
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                quit()
-
-            mousePos = pygame.mouse.get_pos()
-
-            if event.type == pygame.MOUSEBUTTONDOWN:
-
-                # Si se clica en "SALIR"
-                if btSalir.mouseIsOver(mousePos):
-                    quit()
-
-                # Si se clica en "1 VS 1"
-                if btTresEnRaya.mouseIsOver(mousePos):
-                    num_juego = 0
-                    # print("Modo " + modo[modo_jugar_int] + " seleccionado")
-                    return juegos[num_juego]
-
-                # Si se clica en "1 VS PC"
-                elif btSnake.mouseIsOver(mousePos):
-                    num_juego = 1
-                    # print("Modo " + modo[modo_jugar_int] + " seleccionado")
-                    return juegos[num_juego]
-
-            if btTresEnRaya.mouseIsOver(mousePos):
-                btTresEnRaya.color = rojoClaro
-            else:
-                btTresEnRaya.color = rojo
-
-            if btSnake.mouseIsOver(mousePos):
-                btSnake.color = rojoClaro
-            else:
-                btSnake.color = rojo
-
-            if btSalir.mouseIsOver(mousePos):
-                btSalir.color = doradoClaro
-            else:
-                btSalir.color = dorado
-
-        pygame.display.update()
-
-# Funcion que lanza el juego elegido
-def lanzar_juego(juego):
-    listaJuegos = {
-        "Tres en Raya": "from TresEnRaya import tresEnRaya",
-        "Snake" : "print('Lanzando snake')"
-    }
-
-    return (listaJuegos.get(juego, "Error"))
-
-# Funcion que inicia el arcade
-def inicio():
-
-    juego = menuInicial()
-    # print("El juego seleccionado es " + juego)
-
-    if lanzar_juego(juego) != "Error":
-        exec(lanzar_juego(juego))
-
-    else:
-        "Error lanzando el juego"
-
-inicio()
