@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 '''
-    Define los juegos disponibles en el arcade, junto con su script lanzador
+    Define los juegos disponibles en el arcade junto con su script lanzador
 '''
 
 # <class 'list'>

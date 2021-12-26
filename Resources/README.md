@@ -1,8 +1,8 @@
 
-# Paquete Resources
+# Resources package
 
-Contiene elementos comunes usados por todos los juegos:
+> It contains common elements to all games
 
-* Botones
-* Colores
+* Botons
+* Colours
 

@@ -9,8 +9,8 @@ import Resources.Colours as col
 import pygame
 
 class c_boton():
-   
-    def __init__(self, color, x, y, widht, height, text=''):
+
+    def __init__(self, color, x, y, widht, height, text='', accion=None):
         self.color = color
         # Posicion del boton en la pantalla
         self.x = x
@@ -19,13 +19,14 @@ class c_boton():
         self.widht = widht
         self.height = height
         self.text = text
+        self.accion = accion
 
     def draw(self, screen):
         pygame.draw.rect(screen, self.color, (self.x, self.y, self.widht, self.height), 0)
 
         # Si hay un texto para mostrar en el boton
         if self.text != '':
-            font = pygame.font.Font('freesansbold.ttf', 15)
+            font = pygame.font.Font('freesansbold.ttf', 30)
             text = font.render(self.text, True, col.negro)
             screen.blit(text, (self.x + (self.widht/2 - text.get_width()/2), self.y + (self.height/2 - text.get_height()/2)))
 
@@ -36,3 +37,4 @@ class c_boton():
                 return True
 
         return False
+

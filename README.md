@@ -4,18 +4,18 @@
 
 > A set of games developed with pygame
 
-* Para incluir rapidamente nuevos juegos:
+* To add a new game:
   
     ```
     $ vi listaJuegos.py
     (...)
         {
             "nombre": "NombreJuego",
-            "lanzador": "/ruta/de/ejemplo/Juego/main.py"
+            "lanzador": "/ruta/al/juego/main.py"
         }
     ```
-  
-* Para generar un ejecutable:
+
+* To create an .exe:
     ```
     $ pyinstaller --onefile -w main.py
     $ dist/main
