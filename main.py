@@ -19,7 +19,6 @@ def interrupcion(sig, frame):
 def mainMenu():
 
     pygame.init()
-    font = pygame.font.Font('freesansbold.ttf', 40)
 
     txtTitulo = "Pygame Arcade - Menu"
     pygame.display.set_caption(txtTitulo)
@@ -36,6 +35,7 @@ def mainMenu():
     # Dimensiones del titulo
     #######################
 
+    font = pygame.font.Font("OwnFreeSansBold.ttf", 40)
     text = font.render(txtTitulo, True, col.rojo, col.blanco)
     textRect = text.get_rect()
     #textRect.width = 451
